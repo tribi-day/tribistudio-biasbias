@@ -15,7 +15,12 @@ export default async function handler(req, res) {
 
     const rssUrl = `https://www.pinterest.com/${cleaned}.rss`;
     const r = await fetch(rssUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; widget-bot)' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8',
+        'Referer': 'https://www.pinterest.com/',
+      },
     });
     if (!r.ok) return res.status(500).json({ error: `RSS fetch failed (${r.status})` });
 
