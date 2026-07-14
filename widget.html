@@ -45,7 +45,7 @@
     width: 100%;
     max-width: 320px;
     background: #fff;
-    padding: 14px 14px 42px;
+    padding: 16px 16px 63px;
     cursor: pointer;
     box-shadow:
       0 1px 2px rgba(0,0,0,0.08),
@@ -68,6 +68,7 @@
       0 2px 0 #d8d2c0,
       0 8px 24px rgba(0,0,0,0.16);
     position: relative;
+    transform: rotate(-2.5deg);
   }
   .style-retro .photo {
     border-radius: 2px;
@@ -76,11 +77,11 @@
   .style-retro::before {
     content: '';
     position: absolute;
-    top: -8px;
-    left: 50%;
-    transform: translateX(-50%) rotate(-2deg);
-    width: 90px;
-    height: 26px;
+    top: -14px;
+    right: -26px;
+    transform: rotate(45deg);
+    width: 110px;
+    height: 52px;
     background: rgba(255,255,255,0.55);
     box-shadow: 0 1px 3px rgba(0,0,0,0.1);
     z-index: 2;
