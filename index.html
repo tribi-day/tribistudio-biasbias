@@ -201,7 +201,7 @@
     <button class="copy-btn" onclick="copyUrl()">복사하기</button>
   </div>
 
-  <div class="footer">made by <a href="https://twitter.com/way_byday" target="_blank">@tribi.studio</a></div>
+  <div class="footer">twitter <a href="https://twitter.com/way_byday" target="_blank">@way_byday</a> (tribi studio)</div>
 </div>
 
 <script>
@@ -212,10 +212,10 @@ function selectMode(btn) {
   btn.classList.add('selected');
   mode = btn.dataset.mode;
 }
-function selectStyle(btn) {
-  document.querySelectorAll('.style-btn').forEach(b => b.classList.remove('selected'));
-  btn.classList.add('selected');
-  style = btn.dataset.style;
+function selectStyle(el) {
+  document.querySelectorAll('.style-card').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  style = el.dataset.style;
 }
 function generate() {
   const raw = document.getElementById('boardInput').value.trim();
