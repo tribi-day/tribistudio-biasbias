@@ -106,11 +106,11 @@
 <body>
 <div class="container">
   <h1>biasbias 📌</h1>
-  <p class="sub">핀터레스트 보드를 연결하면, 노션에서 매일 최애 사진이 랜덤으로 뜨는 위젯이 돼요.</p>
+  <p class="sub">핀터레스트 보드를 연결하면, 내 보드에 저장한 이미지가 랜덤으로 뜨는 노션 갤러리 위젯을 만들 수 있어요.</p>
 
   <div class="step">
     <div class="step-title"><span class="step-num">1</span>핀터레스트에 공개 보드 만들기</div>
-    <div class="step-desc">최애 사진들을 핀해서 보드에 모아주세요. 보드는 <b>전체 공개</b>여야 해요!</div>
+    <div class="step-desc">원하는 사진을 핀해서 보드에 모아주세요. 보드는 꼭! <b>전체 공개!</b> 여야 합니다!</div>
   </div>
 
   <div class="step">
@@ -122,9 +122,10 @@
   <div class="step">
     <div class="step-title"><span class="step-num">3</span>모드 선택</div>
     <div class="mode-row">
-      <button class="mode-btn selected" data-mode="daily" onclick="selectMode(this)">📅 오늘의 최애 (하루 한 장)</button>
+      <button class="mode-btn selected" data-mode="daily" onclick="selectMode(this)">📅 하루 한 장</button>
       <button class="mode-btn" data-mode="random" onclick="selectMode(this)">🎲 열 때마다 랜덤</button>
     </div>
+    <div class="step-desc" style="margin-left:0; margin-top:2px;">이미지를 클릭하면 랜덤으로 변경됩니다.</div>
   </div>
 
   <button class="gen-btn" onclick="generate()">위젯 주소 만들기</button>
