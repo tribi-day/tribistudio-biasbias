@@ -11,7 +11,11 @@ export default async function handler(req, res) {
     .replace(/\/$/, '')
     .replace(/\.rss$/, '');
 
-  const rssUrl = `https://www.pinterest.com/${cleaned}.rss`;
+  const rssUrls = [
+    `https://www.pinterest.com/${cleaned}.rss`,
+    `https://kr.pinterest.com/${cleaned}.rss`,
+  ];
+  const rssUrl = rssUrls[0];
   const errors = [];
 
   // XML에서 핀 추출
@@ -35,23 +39,25 @@ export default async function handler(req, res) {
     return items;
   }
 
-  // 방법 1: 직접 fetch
-  try {
-    const r = await fetch(rssUrl, {
-      signal: AbortSignal.timeout(4000),
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
-        'Accept': 'application/rss+xml, application/xml, text/xml, */*',
-      },
-    });
-    if (r.ok) {
-      const items = parseXml(await r.text());
-      if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'direct' });
-      errors.push('direct: 0 items');
-    } else {
-      errors.push(`direct: ${r.status}`);
-    }
-  } catch (e) { errors.push(`direct: ${e.message}`); }
+  // 방법 1: 직접 fetch (www, kr 순서로 시도)
+  for (const u of rssUrls) {
+    try {
+      const r = await fetch(u, {
+        signal: AbortSignal.timeout(4000),
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+          'Accept': 'application/rss+xml, application/xml, text/xml, */*',
+        },
+      });
+      if (r.ok) {
+        const items = parseXml(await r.text());
+        if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'direct:' + u });
+        errors.push(`direct(${u}): 0 items`);
+      } else {
+        errors.push(`direct(${u}): ${r.status}`);
+      }
+    } catch (e) { errors.push(`direct(${u}): ${e.message}`); }
+  }
 
   // 방법 2: rss2json
   try {
