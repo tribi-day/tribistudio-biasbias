@@ -6,7 +6,7 @@ export default async function handler(req, res) {
   if (!board) return res.status(400).json({ error: 'board required' });
 
   const cleaned = board
-    .replace(/^https?:\/\/(www\.)?pinterest\.[a-z.]+\//, '')
+    .replace(/^https?:\/\/([a-z]{2,3}\.)?pinterest\.[a-z.]+\//, '')
     .replace(/\/$/, '')
     .replace(/\.rss$/, '');
 
