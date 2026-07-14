@@ -38,6 +38,7 @@ export default async function handler(req, res) {
   // 방법 1: 직접 fetch
   try {
     const r = await fetch(rssUrl, {
+      signal: AbortSignal.timeout(4000),
       headers: {
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
         'Accept': 'application/rss+xml, application/xml, text/xml, */*',
@@ -54,7 +55,7 @@ export default async function handler(req, res) {
 
   // 방법 2: rss2json
   try {
-    const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`);
+    const r = await fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(rssUrl)}`, { signal: AbortSignal.timeout(4000) });
     const data = await r.json();
     if (data.status === 'ok' && data.items) {
       const items = [];
@@ -78,7 +79,7 @@ export default async function handler(req, res) {
 
   // 방법 3: allorigins
   try {
-    const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`);
+    const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`, { signal: AbortSignal.timeout(4000) });
     if (r.ok) {
       const items = parseXml(await r.text());
       if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'allorigins' });
@@ -90,7 +91,7 @@ export default async function handler(req, res) {
 
   // 방법 4: corsproxy.io
   try {
-    const r = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(rssUrl)}`);
+    const r = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(rssUrl)}`, { signal: AbortSignal.timeout(4000) });
     if (r.ok) {
       const items = parseXml(await r.text());
       if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'corsproxy' });
