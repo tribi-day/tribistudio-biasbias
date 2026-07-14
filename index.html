@@ -59,6 +59,53 @@
   }
   .mode-btn.selected { border-color: #1a1a1a; background: #1a1a1a; color: #fff; }
 
+  /* 디자인 미리보기 카드 */
+  .style-row { display: flex; gap: 10px; }
+  .style-card {
+    flex: 1;
+    border: 1.5px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 14px 8px 10px;
+    background: #fff;
+    cursor: pointer;
+    text-align: center;
+    transition: border-color 0.15s;
+  }
+  .style-card.selected { border-color: #1a1a1a; }
+  .style-card .label { font-size: 12px; font-weight: 600; margin-top: 10px; color: #1a1a1a; }
+  .preview-stage {
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  /* 미리보기 안의 가짜 사진 */
+  .pv-photo {
+    width: 33px;
+    aspect-ratio: 3/4;
+    background: linear-gradient(135deg, #f6c8d4 0%, #c9d4f0 55%, #d8e8d4 100%);
+    display: block;
+  }
+  /* 심플 */
+  .pv-simple { border-radius: 6px; overflow: hidden; box-shadow: 0 3px 8px rgba(0,0,0,0.14); }
+  /* 폴라로이드 */
+  .pv-frame {
+    background: #fff; padding: 5px 5px 15px;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.14); border: 1px solid #eee;
+  }
+  /* 레트로 */
+  .pv-retro {
+    background: #f4efe3; padding: 5px; border-radius: 2px;
+    box-shadow: 0 1.5px 0 #d8d2c0, 0 4px 10px rgba(0,0,0,0.14);
+    transform: rotate(-6deg); position: relative;
+  }
+  .pv-retro .pv-photo { filter: sepia(0.25) saturate(1.1) contrast(0.95); border-radius: 1px; }
+  .pv-retro::before {
+    content: ''; position: absolute; top: -6px; right: -10px;
+    width: 34px; height: 16px; transform: rotate(45deg);
+    background: rgba(255,255,255,0.6); box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+  }
+
   .gen-btn {
     width: 100%;
     padding: 15px;
@@ -130,10 +177,19 @@
 
   <div class="step">
     <div class="step-title"><span class="step-num">4</span>디자인 선택</div>
-    <div class="mode-row">
-      <button class="style-btn mode-btn selected" data-style="simple" onclick="selectStyle(this)">🖤 심플</button>
-      <button class="style-btn mode-btn" data-style="frame" onclick="selectStyle(this)">🖼️ 액자</button>
-      <button class="style-btn mode-btn" data-style="retro" onclick="selectStyle(this)">📼 레트로</button>
+    <div class="style-row">
+      <div class="style-card selected" data-style="simple" onclick="selectStyle(this)">
+        <div class="preview-stage"><div class="pv-simple"><div class="pv-photo"></div></div></div>
+        <div class="label">심플</div>
+      </div>
+      <div class="style-card" data-style="frame" onclick="selectStyle(this)">
+        <div class="preview-stage"><div class="pv-frame"><div class="pv-photo"></div></div></div>
+        <div class="label">폴라로이드</div>
+      </div>
+      <div class="style-card" data-style="retro" onclick="selectStyle(this)">
+        <div class="preview-stage"><div class="pv-retro"><div class="pv-photo"></div></div></div>
+        <div class="label">레트로</div>
+      </div>
     </div>
   </div>
 
