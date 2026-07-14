@@ -1,7 +1,6 @@
 // 핀터레스트 공개 보드 RSS 파싱 — 여러 프록시 fallback 체인
 export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate');
 
   const { board } = req.query;
   if (!board) return res.status(400).json({ error: 'board required' });
@@ -51,7 +50,7 @@ export default async function handler(req, res) {
       });
       if (r.ok) {
         const items = parseXml(await r.text());
-        if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'direct:' + u });
+        if (items.length > 0) { res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate'); return res.status(200).json({ count: items.length, pins: items, via: 'direct:' + u }); }
         errors.push(`direct(${u}): 0 items`);
       } else {
         errors.push(`direct(${u}): ${r.status}`);
@@ -76,7 +75,7 @@ export default async function handler(req, res) {
           });
         }
       }
-      if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'rss2json' });
+      if (items.length > 0) { res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate'); return res.status(200).json({ count: items.length, pins: items, via: 'rss2json' }); }
       errors.push('rss2json: 0 items');
     } else {
       errors.push(`rss2json: ${data.message || 'failed'}`);
@@ -88,7 +87,7 @@ export default async function handler(req, res) {
     const r = await fetch(`https://api.allorigins.win/raw?url=${encodeURIComponent(rssUrl)}`, { signal: AbortSignal.timeout(4000) });
     if (r.ok) {
       const items = parseXml(await r.text());
-      if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'allorigins' });
+      if (items.length > 0) { res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate'); return res.status(200).json({ count: items.length, pins: items, via: 'allorigins' }); }
       errors.push('allorigins: 0 items');
     } else {
       errors.push(`allorigins: ${r.status}`);
@@ -100,12 +99,13 @@ export default async function handler(req, res) {
     const r = await fetch(`https://corsproxy.io/?url=${encodeURIComponent(rssUrl)}`, { signal: AbortSignal.timeout(4000) });
     if (r.ok) {
       const items = parseXml(await r.text());
-      if (items.length > 0) return res.status(200).json({ count: items.length, pins: items, via: 'corsproxy' });
+      if (items.length > 0) { res.setHeader('Cache-Control', 's-maxage=3600, stale-while-revalidate'); return res.status(200).json({ count: items.length, pins: items, via: 'corsproxy' }); }
       errors.push('corsproxy: 0 items');
     } else {
       errors.push(`corsproxy: ${r.status}`);
     }
   } catch (e) { errors.push(`corsproxy: ${e.message}`); }
 
+  res.setHeader('Cache-Control', 'no-store');
   res.status(500).json({ error: '모든 방법 실패', details: errors });
 }
