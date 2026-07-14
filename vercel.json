@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/pinterest.js": {
+      "maxDuration": 15
+    }
+  }
+}
