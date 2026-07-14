@@ -165,7 +165,7 @@ function generate() {
   const raw = document.getElementById('boardInput').value.trim();
   if (!raw) { alert('보드 주소를 입력해주세요!'); return; }
   const cleaned = raw
-    .replace(/^https?:\/\/(www\.)?pinterest\.[a-z.]+\//, '')
+    .replace(/^https?:\/\/([a-z]{2,3}\.)?pinterest\.[a-z.]+\//, '')
     .replace(/\/$/, '');
   const url = `${location.origin}/widget.html?board=${encodeURIComponent(cleaned)}&mode=${mode}&style=${style}`;
   document.getElementById('resultUrl').textContent = url;
