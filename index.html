@@ -5,6 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>biasbias — 오늘의 최애 위젯</title>
 <style>
+  @font-face {
+    font-family: 'nrnr';
+    src: url('/fonts/nrnr.ttf') format('truetype');
+  }
+  @font-face {
+    font-family: 'spj';
+    src: url('/fonts/spj.ttf') format('truetype');
+  }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -72,6 +80,17 @@
     transition: border-color 0.15s;
   }
   .style-card.selected { border-color: #1a1a1a; }
+  .font-row { display: flex; gap: 8px; }
+  .font-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1.5px solid #e0e0e0;
+    background: #fff;
+    font-size: 17px;
+    cursor: pointer;
+  }
+  .font-btn.selected { border-color: #1a1a1a; }
   .style-card .label { font-size: 12px; font-weight: 600; margin-top: 10px; color: #1a1a1a; }
   .preview-stage {
     height: 78px;
@@ -191,6 +210,15 @@
         <div class="label">레트로</div>
       </div>
     </div>
+
+    <div id="captionBox" style="display:none; margin-top:16px;">
+      <div class="step-desc" style="margin-left:0; margin-bottom:8px;">폴라로이드 하단에 문구를 넣을 수 있어요 (선택)</div>
+      <input id="captionInput" type="text" placeholder="예: 내 최애 ♡" maxlength="30" style="margin-bottom:10px;">
+      <div class="font-row">
+        <button class="font-btn selected" data-font="nrnr" onclick="selectFont(this)" style="font-family:'nrnr';">느릿느릿체</button>
+        <button class="font-btn" data-font="spj" onclick="selectFont(this)" style="font-family:'spj';">손편지체</button>
+      </div>
+    </div>
   </div>
 
   <button class="gen-btn" onclick="generate()">위젯 주소 만들기</button>
@@ -212,10 +240,17 @@ function selectMode(btn) {
   btn.classList.add('selected');
   mode = btn.dataset.mode;
 }
+let font = 'nrnr';
 function selectStyle(el) {
   document.querySelectorAll('.style-card').forEach(b => b.classList.remove('selected'));
   el.classList.add('selected');
   style = el.dataset.style;
+  document.getElementById('captionBox').style.display = (style === 'frame') ? 'block' : 'none';
+}
+function selectFont(btn) {
+  document.querySelectorAll('.font-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  font = btn.dataset.font;
 }
 function generate() {
   const raw = document.getElementById('boardInput').value.trim();
@@ -223,7 +258,11 @@ function generate() {
   const cleaned = raw
     .replace(/^https?:\/\/([a-z]{2,3}\.)?pinterest\.[a-z.]+\//, '')
     .replace(/\/$/, '');
-  const url = `${location.origin}/widget.html?board=${encodeURIComponent(cleaned)}&mode=${mode}&style=${style}`;
+  let url = `${location.origin}/widget.html?board=${encodeURIComponent(cleaned)}&mode=${mode}&style=${style}`;
+  if (style === 'frame') {
+    const cap = document.getElementById('captionInput').value.trim();
+    if (cap) url += `&caption=${encodeURIComponent(cap)}&font=${font}`;
+  }
   document.getElementById('resultUrl').textContent = url;
   document.getElementById('result').classList.add('show');
 }
